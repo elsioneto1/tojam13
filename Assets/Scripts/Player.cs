@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public enum PlayerID { P1,P2,P3};
+    public PlayerID playerID;
+
     public float speedX, speedY;
     public AnimationCurve movementBehaviour;
 
@@ -28,7 +31,9 @@ public class Player : MonoBehaviour {
     private Vector3 specialMovementInitialVec;
 
     //states 
+    [HideInInspector]
     public bool grounded;
+    private bool stunned;
 
     //components
     private Rigidbody rb;
@@ -127,14 +132,41 @@ public class Player : MonoBehaviour {
     private void GetInputsSPecialMov()
     {
         SpecialMovement queuedMov = null;
-        if (Input.GetKeyDown(KeyCode.Joystick1Button1))
-            queuedMov = inputBAction;
+        if (playerID == PlayerID.P1)
+        {
+            if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+                queuedMov = inputBAction;
 
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
-            queuedMov = inputAAction;
-        
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-            queuedMov = inputXAction;
+            if (Input.GetKeyDown(KeyCode.Joystick1Button0))
+                queuedMov = inputAAction;
+
+            if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+                queuedMov = inputXAction;
+        }
+        if (playerID == PlayerID.P2)
+        {
+
+            if (Input.GetKeyDown(KeyCode.Joystick2Button1))
+                queuedMov = inputBAction;
+
+            if (Input.GetKeyDown(KeyCode.Joystick2Button0))
+                queuedMov = inputAAction;
+
+            if (Input.GetKeyDown(KeyCode.Joystick2Button2))
+                queuedMov = inputXAction;
+        }
+        if (playerID == PlayerID.P3)
+        {
+
+            if (Input.GetKeyDown(KeyCode.Joystick3Button1))
+                queuedMov = inputBAction;
+
+            if (Input.GetKeyDown(KeyCode.Joystick3Button0))
+                queuedMov = inputAAction;
+
+            if (Input.GetKeyDown(KeyCode.Joystick3Button2))
+                queuedMov = inputXAction;
+        }
 
         if (queuedMov != null)
             if (currentSpecialMovement == null)
@@ -145,8 +177,23 @@ public class Player : MonoBehaviour {
     {
         if (!controlling)
             return;
-        inputX = Input.GetAxis("Horizontal");
-        inputY = Input.GetAxis("Vertical");
+        if (playerID == PlayerID.P1)
+        {
+            inputX = Input.GetAxis("Horizontal");
+            inputY = Input.GetAxis("Vertical");
+        }
+        if (playerID == PlayerID.P2)
+        {
+
+            inputX = Input.GetAxis("Horizontal2");
+            inputY = Input.GetAxis("Vertical2");
+        }
+        if (playerID == PlayerID.P3)
+        {
+
+            inputX = Input.GetAxis("Horizontal3");
+            inputY = Input.GetAxis("Vertical3");
+        }
     }
 
     void GetVelocity()
@@ -154,11 +201,12 @@ public class Player : MonoBehaviour {
         velocity = new Vector3(0, 0, 0);
         
         float curve = movementBehaviour.Evaluate(curveParser);
-        velocity +=  (Quaternion.AngleAxis(-45, Vector3.up) * Vector3.right) * speedX * inputX;
-        velocity +=  (Quaternion.AngleAxis(-45, Vector3.up) * Vector3.forward  ) * inputY * speedY;
+        velocity +=  (Quaternion.AngleAxis(-45, Vector3.up) * Vector3.right)  * inputX;
+        velocity +=  (Quaternion.AngleAxis(-45, Vector3.up) * Vector3.forward  )  * inputY;
         velocity.Normalize();
+        velocity.x *= speedX;
+        velocity.z *= speedY;
         velocity *= curve;
-       // velocity.y = rb.velocity.y;
 
     }
 
@@ -205,7 +253,10 @@ public class Player : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Lose Point");
+        }
     }
 
     private void OnCollisionExit(Collision collision)

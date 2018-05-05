@@ -29,6 +29,8 @@ public class SpecialMovement : ScriptableObject{
     public float velocityBiggerThan = 0;
     public bool grounded;
 
+    public int pointsOnSuccess = 10;
+    public int pointsOnFailure = 10;
 
     private float movementCurrentElapsedTime;
     public void UpdateStates(float elapsedTime)

@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FunkManager : MonoBehaviour
 {
+
+    public static FunkManager S_INSTANCE;
+
 	[Header("Common Attributes")]
 	public int preparingTime;
 	public int resetTime;
@@ -22,12 +26,21 @@ public class FunkManager : MonoBehaviour
 	private List<Enums.ActionTypes> player2Actions = new List<Enums.ActionTypes>();
 	private List<Enums.ActionTypes> player3Actions = new List<Enums.ActionTypes>();
 
-	//public List<Player> playerList = new List<Player>();
+    //public List<Player> playerList = new List<Player>();
 
-	private void Start()
+    private float points;
+    public int maxPoints;
+    public float successStreak = 1;
+
+    public UnityEvent PositivePointsCB;
+    public UnityEvent NegativePointsCB;
+
+    private void Start()
 	{
 		StartCoroutine(BuildNextWaveSet());
-	}
+        S_INSTANCE = this;
+
+    }
 
 	private IEnumerator BuildNextWaveSet()
 	{
@@ -100,6 +113,33 @@ public class FunkManager : MonoBehaviour
 		}
 	}
 
+    public void ModifyPoints(int points)
+    {
+
+        if (points > 0)
+        {
+
+            this.points += points * successStreak;
+            successStreak += 0.1f;
+            if (successStreak > 2)
+                successStreak = 2;
+            PositivePointsCB.Invoke();
+        }
+        else if (points < 0)
+        {
+            this.points += points ;
+            successStreak = 1;
+            NegativePointsCB.Invoke();
+        }
+
+        if (points < 0)
+            points = 0;
+        if (points > maxPoints)
+            points = maxPoints;
+
+        
+    }
+
 }
 
 public static class FunkExtensions
@@ -117,4 +157,9 @@ public static class FunkExtensions
 			list[n] = value;  
 		}  
 	}
+
+    
+
 }
+
+
