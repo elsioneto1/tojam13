@@ -14,6 +14,8 @@ public class SpecialMovement : ScriptableObject{
     }
 
     // vel over time
+    public Enums.ActionTypes action;
+
     public AnimationCurve movementBehasviour = AnimationCurve.Linear(0,0,1,1);
     public FloatIntervals[] controlIntervals;
     public float movementInitialForce;

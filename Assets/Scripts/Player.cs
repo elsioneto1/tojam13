@@ -7,8 +7,8 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour {
 
     public enum PlayerID { P1,P2,P3};
-    public PlayerID playerID;
-
+    public Enums.Players playerID;
+   
     public float speedX, speedY;
     public AnimationCurve movementBehaviour;
 
@@ -107,8 +107,10 @@ public class Player : MonoBehaviour {
         {
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
+            FunkManager.CompleteAction(currentSpecialMovement.action, playerID);
             currentSpecialMovement = null;
             finishMovCB.Invoke();
+
         }
     }
 
@@ -161,7 +163,7 @@ public class Player : MonoBehaviour {
     {
         
         SpecialMovement queuedMov = null;
-        if (playerID == PlayerID.P1)
+        if (playerID == Enums.Players.Player1)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button1))
                 queuedMov = inputBAction;
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Joystick1Button2))
                 queuedMov = inputXAction;
         }
-        if (playerID == PlayerID.P2)
+        if (playerID == Enums.Players.Player2)
         {
 
             if (Input.GetKeyDown(KeyCode.Joystick2Button1))
@@ -184,7 +186,7 @@ public class Player : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Joystick2Button2))
                 queuedMov = inputXAction;
         }
-        if (playerID == PlayerID.P3)
+        if (playerID == Enums.Players.Player3)
         {
 
             if (Input.GetKeyDown(KeyCode.Joystick3Button1))
@@ -206,18 +208,18 @@ public class Player : MonoBehaviour {
     {
         if (!controlling)
             return;
-        if (playerID == PlayerID.P1)
+        if (playerID == Enums.Players.Player1)
         {
             inputX = Input.GetAxis("Horizontal");
             inputY = Input.GetAxis("Vertical");
         }
-        if (playerID == PlayerID.P2)
+        if (playerID == Enums.Players.Player2)
         {
 
             inputX = Input.GetAxis("Horizontal2");
             inputY = Input.GetAxis("Vertical2");
         }
-        if (playerID == PlayerID.P3)
+        if (playerID == Enums.Players.Player3)
         {
 
             inputX = Input.GetAxis("Horizontal3");
