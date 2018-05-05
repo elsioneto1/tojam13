@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
 
     private Vector3 extraMovement;
 
+    private float movementCurrentElapsedTime;
 
     public UnityEvent finishMovCB;
     // Use this for initialization
@@ -67,7 +68,7 @@ public class Player : MonoBehaviour {
             }
             else
             {
-                currentSpecialMovement.UpdateStates(Time.deltaTime * currentSpecialMovement.timeScaler);
+                UpdateStates(Time.deltaTime * currentSpecialMovement.timeScaler);
 
                 ProcessVelocitySpecialMovement();
 
@@ -82,6 +83,28 @@ public class Player : MonoBehaviour {
         CheckGrounded();
 
 
+    }
+
+    private void UpdateStates(float v)
+    {
+        movementCurrentElapsedTime += v;
+    }
+
+    private bool controlLock = false;
+    public bool GetControlLock()
+    {
+        controlLock = false;
+        for (int i = 0; i < currentSpecialMovement.controlIntervals.Length; i++)
+        {
+            if (movementCurrentElapsedTime > currentSpecialMovement.controlIntervals[i].start && movementCurrentElapsedTime < currentSpecialMovement.controlIntervals[i].end)
+                controlLock = true;
+        }
+        return controlLock;
+    }
+
+    void UpdateStates()
+    {
+        movementCurrentElapsedTime = Time.deltaTime* currentSpecialMovement.timeScaler;
     }
 
     void CheckGrounded()
@@ -103,7 +126,7 @@ public class Player : MonoBehaviour {
 
     void FinishMovement()
     {
-        if ( currentSpecialMovement.GetElapsedTime() >1)
+        if ( GetElapsedTime() >1)
         {
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
@@ -127,10 +150,15 @@ public class Player : MonoBehaviour {
         //if
     }
 
+    float GetElapsedTime()
+    {
+        return movementCurrentElapsedTime;
+    }
+
     void ProcessVelocitySpecialMovement()
     {
         
-        velocity = specialMovementInitialVec * currentSpecialMovement.movementBehasviour.Evaluate(currentSpecialMovement.GetElapsedTime()) * currentSpecialMovement.speedModifier;
+        velocity = specialMovementInitialVec * currentSpecialMovement.movementBehasviour.Evaluate(GetElapsedTime()) * currentSpecialMovement.speedModifier;
         
         if (currentSpecialMovement.allowSteering)
         {
@@ -272,7 +300,7 @@ public class Player : MonoBehaviour {
         {
             previousSpecialMovement = currentSpecialMovement;
             currentSpecialMovement = movement;
-            currentSpecialMovement.ResetTime();
+            ResetTime();
 
             velocity.y = currentSpecialMovement.jumpVelocity;
             rb.velocity = velocity;
@@ -281,6 +309,10 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void ResetTime()
+    {
+        movementCurrentElapsedTime = 0;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

@@ -34,37 +34,12 @@ public class SpecialMovement : ScriptableObject{
     public int pointsOnSuccess = 10;
     public int pointsOnFailure = 10;
 
-    private float movementCurrentElapsedTime;
-    public void UpdateStates(float elapsedTime)
-    {
-
-        movementCurrentElapsedTime += elapsedTime;
-    }
-
+  
     private bool controlLock = false;
 
-    public bool GetControlLock()
-    {
-        controlLock = false;
-        for (int i = 0; i < controlIntervals.Length; i++)
-        {
-            if (movementCurrentElapsedTime > controlIntervals[i].start && movementCurrentElapsedTime < controlIntervals[i].end)
-                controlLock = true;
-        }
-        return controlLock;
-    }
 
-    public float GetElapsedTime()
-    {
-
-        return movementCurrentElapsedTime;
-
-    }
-
-    public void ResetTime()
-    {
-        movementCurrentElapsedTime = 0;
-    }
+ 
+  
 
 #if UNITY_EDITOR
     [MenuItem("Assets/Create/SpecialMovement")]
