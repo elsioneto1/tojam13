@@ -35,9 +35,8 @@ public class SpecialMovement : ScriptableObject{
     private float movementCurrentElapsedTime;
     public void UpdateStates(float elapsedTime)
     {
-        Debug.Log(elapsedTime);
+
         movementCurrentElapsedTime += elapsedTime;
-        Debug.Log(movementCurrentElapsedTime);
     }
 
     private bool controlLock = false;

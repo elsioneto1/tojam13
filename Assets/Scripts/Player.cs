@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour {
 
@@ -40,6 +41,9 @@ public class Player : MonoBehaviour {
     private Collider colliderComponent;
 
     private Vector3 extraMovement;
+
+
+    public UnityEvent finishMovCB;
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody>();
@@ -49,38 +53,52 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (currentSpecialMovement == null)
+        if (!stunned)
         {
-            if (grounded)
+            if (currentSpecialMovement == null)
             {
-                GetAxis();
-                ProcessInputs();
-                GetVelocity();
+                if (grounded)
+                {
+                    GetAxis();
+                    ProcessInputs();
+                    GetVelocity();
+                }
+                Move();
             }
-            Move();
-        }
-        else
-        {
-            currentSpecialMovement.UpdateStates(Time.deltaTime * currentSpecialMovement.timeScaler);
-           
-            ProcessVelocitySpecialMovement();
-            FinishMovement();
-           
-            //ProcessInputs.
+            else
+            {
+                currentSpecialMovement.UpdateStates(Time.deltaTime * currentSpecialMovement.timeScaler);
+
+                ProcessVelocitySpecialMovement();
+
+                FinishMovement();
+
+                //ProcessInputs.
+            }
+            GetInputsSPecialMov();
+
+
         }
         CheckGrounded();
-        GetInputsSPecialMov();
 
 
     }
 
     void CheckGrounded()
     {
+
         RaycastHit hit;
+        grounded = false;
+       // if (rb.velocity.y <=0)
         grounded = Physics.Raycast( transform.position - new Vector3(0, colliderComponent.bounds.extents.y*0.8f, 0), Vector3.down, out hit, 0.1f);
+        if (grounded)
+        {
+            if (stunned)
+            {
+                stunned = false;
 
-        Debug.Log(grounded);
-
+            }
+        }
     }
 
     void FinishMovement()
@@ -88,8 +106,18 @@ public class Player : MonoBehaviour {
         if ( currentSpecialMovement.GetElapsedTime() >1)
         {
             previousSpecialMovement = currentSpecialMovement;
+            FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
             currentSpecialMovement = null;
+            finishMovCB.Invoke();
         }
+    }
+
+    void ResetVariables()
+    {
+        previousSpecialMovement = currentSpecialMovement;
+        currentSpecialMovement = null;
+
+
     }
 
     void ProcessInputsSpecialMovement()
@@ -131,6 +159,7 @@ public class Player : MonoBehaviour {
 
     private void GetInputsSPecialMov()
     {
+        
         SpecialMovement queuedMov = null;
         if (playerID == PlayerID.P1)
         {
@@ -253,9 +282,21 @@ public class Player : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.tag == "Player")
         {
+
             Debug.Log("Lose Point");
+            ResetVariables();
+            stunned = true;
+            Vector3 vel;
+            grounded = false;
+            velocity = Vector3.zero;
+            extraMovement = Vector3.zero;
+            vel = (  transform.position - collision.gameObject.transform.position).normalized * 2;
+            vel.y = 2;
+            rb.velocity = vel;
+
         }
     }
 
