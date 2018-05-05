@@ -9,12 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 077b0a6b10bbf90438f37f2e2ad6038d, type: 3}
-  m_Name: WaveSet0
+  m_Name: WaveSet1
   m_EditorClassIdentifier: 
   FirstSet:
-    wave: 02000000
+    wave: 01000000
   SecondSet:
-    wave: 0200000002000000
+    wave: 02000000
   ThirdSet:
-    wave: 00000000
-  totalWaveTime: 3
+    wave: 0200000001000000
+  totalWaveTime: 6
