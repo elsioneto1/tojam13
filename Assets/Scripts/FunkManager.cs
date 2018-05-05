@@ -18,14 +18,22 @@ public class FunkManager : MonoBehaviour
 	[SerializeField] private Canvas canvas;
 	public List<RectTransform> tileHolderPositionList;
 
+	private List<GameObject> player1Tiles = new List<GameObject>();
+	private List<GameObject> player2Tiles = new List<GameObject>();
+	private List<GameObject> player3Tiles = new List<GameObject>();
+
 	private List<Enums.ActionTypes> player1Actions = new List<Enums.ActionTypes>();
 	private List<Enums.ActionTypes> player2Actions = new List<Enums.ActionTypes>();
 	private List<Enums.ActionTypes> player3Actions = new List<Enums.ActionTypes>();
+
+	public static FunkManager singleton;
+	private bool waveCompleted = false;
 
 	//public List<Player> playerList = new List<Player>();
 
 	private void Start()
 	{
+		singleton = this;
 		StartCoroutine(BuildNextWaveSet());
 	}
 
@@ -41,23 +49,29 @@ public class FunkManager : MonoBehaviour
 			tempList.Add(waveList[currentSet].ThirdSet);
 			tempList.Shuffle();
 
-			List<GameObject> finalList = BuildPlayerTiles(tempList);
-			
+			BuildPlayerTiles(tempList);
+			yield return new WaitForSeconds(1);
+			ScrollTilesDown(player1Tiles, 1, 1);
+			ScrollTilesDown(player2Tiles, 1, 1);
+			ScrollTilesDown(player3Tiles, 1, 1);
 			yield return new WaitForSeconds(preparingTime);
-			ScrollTilesDown(finalList, 1, 1);
+		
 			//Libera os botoes dos jogadores
 			yield return new WaitForSeconds(waveList[ currentSet ].totalWaveTime);
-			//Cabou o tempo, computar score, reseta
+			if(waveCompleted)
+			//WIN AND LOSE
 			yield return new WaitForSeconds(resetTime);
-			//Limpa tudo que tiver que limpar, comeca de novo, proxima wave ou end
+			ResetUI();
 			currentSet++;
 		}
 
 		//Game Over -> EndScreen
 	}
 
-	private List<GameObject> BuildPlayerTiles(List<WaveSet> randomizedList)
+	private void BuildPlayerTiles(List<WaveSet> randomizedList)
 	{
+		waveCompleted = false;
+
 		List<GameObject> tileObjectList = new List<GameObject>();
 
 		for (int i = 0; i < tileHolderPositionList.Count; ++i)
@@ -69,37 +83,115 @@ public class FunkManager : MonoBehaviour
 				t.SetTileAction(randomizedList[ i ].wave[ k ]);
 				t.SetTileColor((Enums.Players)i);
 				tile.transform.SetParent(canvas.transform);
-				tile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+				tile.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 				tile.GetComponent<RectTransform>().anchoredPosition3D = tileHolderPositionList[ i ].anchoredPosition3D + new Vector3(0, 50 * (k + 1), 0);
 				tileObjectList.Add(tile);
 
 				if (i == 0)
+				{
 					player1Actions.Add(randomizedList[ i ].wave[ k ]);
+					player1Tiles.Add(tile);
+				}
+					
 				else if (i == 1)
+				{
 					player2Actions.Add(randomizedList[ i ].wave[ k ]);
+					player2Tiles.Add(tile);
+				}
 				else if (i == 2)
+				{
 					player3Actions.Add(randomizedList[ i ].wave[ k ]);
+					player3Tiles.Add(tile);
+				}
 			}
 		}
-		return tileObjectList;
+	}
+
+	private void ResetUI()
+	{
+		player1Actions.Clear();
+		player2Actions.Clear();
+		player3Actions.Clear();
+		player1Tiles.Clear();
+		player2Tiles.Clear();
+		player3Tiles.Clear();
 	}
 
 	private void ScrollTilesDown(List<GameObject> tileObjects, int units, float time)
 	{
 		foreach(GameObject go in tileObjects)
 		{
-			iTween.MoveTo(go, go.transform.position + new Vector3(0, -120 * units, 0), time);
+			iTween.MoveTo(go, go.transform.position + new Vector3(0, -140 * units, 0), time);
 		}
 	}
 
 	public static void CompleteAction(Enums.ActionTypes action, Enums.Players playerNumber)
 	{
-		switch(playerNumber)
+		switch (playerNumber)
 		{
-			
+			case Enums.Players.Player1:
+				if (singleton.player1Actions.Count == 0)
+					return;
+
+				else if (singleton.player1Actions[ 0 ] == action)
+				{
+					Destroy(singleton.player1Tiles[0]);
+					singleton.player1Actions.Remove(singleton.player1Actions[ 0 ]);
+					singleton.player1Tiles.Remove(singleton.player1Tiles[ 0 ]);
+
+					if(singleton.player1Actions.Count > 0)
+					{
+						singleton.ScrollTilesDown(singleton.player1Tiles,1,1);
+					}
+				}
+				break;
+
+			case Enums.Players.Player2:
+				if (singleton.player2Actions.Count == 0)
+					return;
+
+				else if (singleton.player2Actions[ 0 ] == action)
+				{
+					Destroy(singleton.player2Tiles[0]);
+					singleton.player2Actions.Remove(singleton.player2Actions[ 0 ]);
+					singleton.player2Tiles.Remove(singleton.player2Tiles[ 0 ]);
+
+					if(singleton.player2Actions.Count > 0)
+					{
+						singleton.ScrollTilesDown(singleton.player2Tiles,1,1);
+					}
+				}
+				break;
+
+			case Enums.Players.Player3:
+
+				if (singleton.player3Actions.Count == 0)
+					return;
+
+				else if (singleton.player3Actions[ 0 ] == action)
+				{
+					Destroy(singleton.player3Tiles[0]);
+					singleton.player3Actions.Remove(singleton.player3Actions[ 0 ]);
+					singleton.player3Tiles.Remove(singleton.player3Tiles[ 0 ]);
+
+					if(singleton.player3Actions.Count > 0)
+					{
+						singleton.ScrollTilesDown(singleton.player3Tiles,1,1);
+					}
+				}
+				break;
 		}
+
+		singleton.CheckLevel();
 	}
 
+	private void CheckLevel()
+	{
+		if(player1Actions.Count == 0 && player2Actions.Count == 0 && player3Actions.Count == 0)
+		{
+			waveCompleted = true;
+		}
+	}
 }
 
 public static class FunkExtensions

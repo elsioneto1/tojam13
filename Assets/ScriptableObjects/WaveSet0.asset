@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: WaveSet0
   m_EditorClassIdentifier: 
   FirstSet:
-    wave: 00000000
+    wave: 02000000
   SecondSet:
-    wave: 0100000002000000
+    wave: 0200000002000000
   ThirdSet:
-    wave: 08000000
+    wave: 00000000
   totalWaveTime: 3

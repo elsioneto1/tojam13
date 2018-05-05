@@ -9,12 +9,12 @@ public class Enums
 		Slide = 0,
 		Jump = 1,
 		Hurricane = 2,
-		SlideAndJump = 3,
-		JumpAndSlide = 4,
-		SlideAndHurricane = 5,
-		HurricaneAndSlide = 6,
-		JumpAndHurricane = 7,
-		HurricaneAndJump = 8,
+		//SlideAndJump = 3,
+		//JumpAndSlide = 4,
+		//SlideAndHurricane = 5,
+		//HurricaneAndSlide = 6,
+		//JumpAndHurricane = 7,
+		//HurricaneAndJump = 8,
 	}
 
 	public enum Players

@@ -45,7 +45,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &114369707891281098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,10 +57,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc8311f847e0cce4e8514163523b0549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileText: {fileID: 114529389435295406}
-  player1color: {r: 1, g: 0.49019608, b: 0.49019608, a: 1}
-  player2color: {r: 0.49019608, g: 0.49019608, b: 1, a: 1}
-  player3color: {r: 0.49019608, g: 1, b: 0.49019608, a: 1}
+  player1Sprites:
+  - {fileID: 21300000, guid: a26f276ded6716147b5d2275547725bd, type: 3}
+  - {fileID: 21300000, guid: 471d624e6e5ba7d46b8d2107208a623e, type: 3}
+  - {fileID: 21300000, guid: 48e76bea6e030b649aed349ecc929484, type: 3}
+  player2Sprites:
+  - {fileID: 21300000, guid: 1e224ce105903b741bcc579140d4b745, type: 3}
+  - {fileID: 21300000, guid: 8396c1fdd4bd6e04b8e4fa492e5b5e12, type: 3}
+  - {fileID: 21300000, guid: da37f93de70cc924bbeb87d0e9f1319e, type: 3}
+  player3Sprites:
+  - {fileID: 21300000, guid: a590c0b04e8d5af429ad2ec06b5ffde0, type: 3}
+  - {fileID: 21300000, guid: 9261ac9255083f54cab9e327baf32403, type: 3}
+  - {fileID: 21300000, guid: 459cc54af88b18846b46b9b2f6b262b8, type: 3}
 --- !u!114 &114529389435295406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.49019608, b: 0.49019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -141,7 +149,7 @@ RectTransform:
   m_GameObject: {fileID: 1383354243585610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224958976249797922}
   m_Father: {fileID: 0}

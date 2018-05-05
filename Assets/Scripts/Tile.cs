@@ -5,18 +5,21 @@ using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
-	[SerializeField] private Text tileText;
-	Image imageColor;
-	[SerializeField] private Color player1color, player2color, player3color;
+	Image image;
+	[SerializeField] private List<Sprite> player1Sprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> player2Sprites = new List<Sprite>();
+	[SerializeField] private List<Sprite> player3Sprites = new List<Sprite>();
+
+	Enums.ActionTypes myAction;
 
 	private void Awake()
 	{
-		imageColor = GetComponent<Image>();
+		image = GetComponent<Image>();
 	}
 
 	public void SetTileAction(Enums.ActionTypes action)
 	{
-		tileText.text = action.ToString();
+		myAction = action;
 	}
 
 	public void SetTileColor(Enums.Players playerNumber)
@@ -24,15 +27,15 @@ public class Tile : MonoBehaviour
 		switch (playerNumber)
 		{
 			case Enums.Players.Player1:
-				imageColor.color = player1color;
+				image.sprite = player1Sprites[ (int)myAction ];
 				break;
 
 			case Enums.Players.Player2:
-				imageColor.color = player2color;
+				image.sprite = player2Sprites[ (int)myAction ];
 				break;
 
 			case Enums.Players.Player3:
-				imageColor.color = player3color;
+				image.sprite = player3Sprites[ (int)myAction ];
 				break;
 
 		}
