@@ -14,24 +14,24 @@ public class Tile : MonoBehaviour
 		imageColor = GetComponent<Image>();
 	}
 
-	public void SetTileAction(Enums.ActionType action)
+	public void SetTileAction(Enums.ActionTypes action)
 	{
 		tileText.text = action.ToString();
 	}
 
-	public void SetTileColor(Enums.TileColor playerNumber)
+	public void SetTileColor(Enums.Players playerNumber)
 	{
 		switch (playerNumber)
 		{
-			case Enums.TileColor.Player1:
+			case Enums.Players.Player1:
 				imageColor.color = player1color;
 				break;
 
-			case Enums.TileColor.Player2:
+			case Enums.Players.Player2:
 				imageColor.color = player2color;
 				break;
 
-			case Enums.TileColor.Player3:
+			case Enums.Players.Player3:
 				imageColor.color = player3color;
 				break;
 

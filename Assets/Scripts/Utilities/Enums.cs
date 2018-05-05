@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enums
 {
-	public enum ActionType
+	public enum ActionTypes
 	{
 		Slide = 0,
 		Jump = 1,
@@ -17,7 +17,7 @@ public class Enums
 		HurricaneAndJump = 8,
 	}
 
-	public enum TileColor
+	public enum Players
 	{
 		Player1,
 		Player2,

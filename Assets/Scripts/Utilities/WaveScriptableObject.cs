@@ -13,5 +13,5 @@ public class WaveScriptableObject :  ScriptableObject
 [System.Serializable]
 public class WaveSet
 {
-	public List<Enums.ActionType> wave;
+	public List<Enums.ActionTypes> wave;
 }

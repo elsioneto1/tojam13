@@ -18,6 +18,10 @@ public class FunkManager : MonoBehaviour
 	[SerializeField] private Canvas canvas;
 	public List<RectTransform> tileHolderPositionList;
 
+	private List<Enums.ActionTypes> player1Actions = new List<Enums.ActionTypes>();
+	private List<Enums.ActionTypes> player2Actions = new List<Enums.ActionTypes>();
+	private List<Enums.ActionTypes> player3Actions = new List<Enums.ActionTypes>();
+
 	//public List<Player> playerList = new List<Player>();
 
 	private void Start()
@@ -63,11 +67,18 @@ public class FunkManager : MonoBehaviour
 				GameObject tile = Instantiate(tilePrefab, Vector3.zero, Quaternion.identity);
 				Tile t = tile.GetComponent<Tile>();
 				t.SetTileAction(randomizedList[ i ].wave[ k ]);
-				t.SetTileColor((Enums.TileColor)i);
+				t.SetTileColor((Enums.Players)i);
 				tile.transform.SetParent(canvas.transform);
 				tile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 				tile.GetComponent<RectTransform>().anchoredPosition3D = tileHolderPositionList[ i ].anchoredPosition3D + new Vector3(0, 50 * (k + 1), 0);
 				tileObjectList.Add(tile);
+
+				if (i == 0)
+					player1Actions.Add(randomizedList[ i ].wave[ k ]);
+				else if (i == 1)
+					player2Actions.Add(randomizedList[ i ].wave[ k ]);
+				else if (i == 2)
+					player3Actions.Add(randomizedList[ i ].wave[ k ]);
 			}
 		}
 		return tileObjectList;
@@ -80,8 +91,16 @@ public class FunkManager : MonoBehaviour
 			iTween.MoveTo(go, go.transform.position + new Vector3(0, -120 * units, 0), time);
 		}
 	}
-}
 
+	public static void CompleteAction(Enums.ActionTypes action, Enums.Players playerNumber)
+	{
+		switch(playerNumber)
+		{
+			
+		}
+	}
+
+}
 
 public static class FunkExtensions
 {
