@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: WaveSet3
   m_EditorClassIdentifier: 
   FirstSet:
-    actions: 000000000100000000000000
+    actions: 00000000010000000000000001000000
   SecondSet:
     actions: 01000000020000000000000000000000
   ThirdSet:

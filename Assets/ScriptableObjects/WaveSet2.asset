@@ -14,7 +14,7 @@ MonoBehaviour:
   FirstSet:
     actions: 000000000000000002000000
   SecondSet:
-    actions: 02000000010000000200000000000000
+    actions: 020000000100000002000000
   ThirdSet:
     actions: 000000000100000000000000
   totalWaveTime: 10
