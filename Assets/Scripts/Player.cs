@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
     private SpecialMovement previousSpecialMovement;
     public SpecialMovement currentSpecialMovement;
 
+	Animator animator;
 
     public SpecialMovement inputBAction;
     public SpecialMovement inputAAction;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour {
     public UnityEvent finishMovCB;
     // Use this for initialization
     void Start() {
+		animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         colliderComponent = GetComponent<Collider>();
     }
@@ -116,6 +118,15 @@ public class Player : MonoBehaviour {
         grounded = Physics.Raycast( transform.position - new Vector3(0, colliderComponent.bounds.extents.y*0.8f, 0), Vector3.down, out hit, 0.1f);
         if (grounded)
         {
+			if(animator.GetBool("IsJumping") && animator.GetCurrentAnimatorStateInfo(0).IsName("InAir"))
+			{
+				animator.SetBool("CompletedJump", true);
+			}
+
+			else if(animator.GetBool("CompletedJump") && animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+			{
+				animator.SetBool("CompletedJump", false);
+			}
             if (stunned)
             {
                 stunned = false;
@@ -134,7 +145,12 @@ public class Player : MonoBehaviour {
             currentSpecialMovement = null;
             finishMovCB.Invoke();
 
-        }
+			if (animator.GetBool("IsJumping"))
+				animator.SetBool("IsJumping", false);
+
+			if (animator.GetBool("IsSliding"))
+				animator.SetBool("IsSliding", false);
+		}
     }
 
     void ResetVariables()
@@ -267,6 +283,23 @@ public class Player : MonoBehaviour {
         velocity.z *= speedY;
         velocity *= curve;
 
+		if(inputX > 0 && transform.localScale.x > 0)
+		{
+			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+		}
+		else if(inputX < 0 && transform.localScale.x < 0)
+		{
+			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+		}
+
+		if(Mathf.Abs(inputX) > 0.25f || Mathf.Abs(inputY) > 0.25f)
+		{
+			animator.SetBool("IsWalking", true);
+		}
+		else
+		{
+			animator.SetBool("IsWalking", false);
+		}
     }
 
     void ProcessInputs()
@@ -285,6 +318,7 @@ public class Player : MonoBehaviour {
         //float velY = rb.velocity.y;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
+		
         
     }
 
@@ -306,6 +340,15 @@ public class Player : MonoBehaviour {
             rb.velocity = velocity;
             extraMovement = velocity.normalized;
             specialMovementInitialVec = velocity.normalized;
+
+			if(movement.jumpVelocity > 0)
+			{
+				animator.SetBool("IsJumping", true);
+			}
+			else if(movement.applyHurricane == false)
+			{
+				animator.SetBool("IsSliding", true);
+			}
         }
     }
 
