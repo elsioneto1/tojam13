@@ -101,13 +101,13 @@ public class Player : MonoBehaviour {
     {
         if (comboTimerCountdown > 0)
         {
-            Debug.Log(comboTimerCountdown   );
+           // Debug.Log(comboTimerCountdown   );
             comboTimerCountdown -= Time.deltaTime;
 
         }
         else
         {
-            Debug.Log("no combo");
+           // Debug.Log("no combo");
             canCombo = false;
             currentActionSequence.Clear();
         }
