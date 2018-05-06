@@ -35,7 +35,9 @@ public class FunkManager : MonoBehaviour
 
     private float points;
     public int maxPoints;
-    public float successStreak = 1;
+
+    public float comboTimeFrame = 1;
+
 
     public UnityEvent PositivePointsCB;
     public UnityEvent NegativePointsCB;
@@ -226,16 +228,16 @@ public class FunkManager : MonoBehaviour
         if (points > 0)
         {
 
-            this.points += points * successStreak;
-            successStreak += 0.1f;
-            if (successStreak > 2)
-                successStreak = 2;
+            //this.points += points * successStreak;
+            //successStreak += 0.1f;
+            //if (successStreak > 2)
+            //    successStreak = 2;
             PositivePointsCB.Invoke();
         }
         else if (points < 0)
         {
             this.points += points ;
-            successStreak = 1;
+          //  successStreak = 1;
             NegativePointsCB.Invoke();
         }
 

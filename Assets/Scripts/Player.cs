@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     private float inputX, inputY;
 
     private Vector3 velocity;
+    public float comboStreak = 1;
 
     private SpecialMovement previousSpecialMovement;
     public SpecialMovement currentSpecialMovement;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour {
 
     // special movement variables
     private Vector3 specialMovementInitialVec;
-
+    
     //states 
     [HideInInspector]
     public bool grounded;
@@ -45,7 +46,12 @@ public class Player : MonoBehaviour {
 
     private float movementCurrentElapsedTime;
 
+    private float comboTimerCountdown = -1;
+
+    public bool canCombo = false;
+
     public UnityEvent finishMovCB;
+    public UnityEvent comboCB;
     // Use this for initialization
     void Start() {
 		animator = GetComponent<Animator>();
@@ -65,8 +71,11 @@ public class Player : MonoBehaviour {
                     GetAxis();
                     ProcessInputs();
                     GetVelocity();
+
                 }
                 Move();
+                CheckComboCountdown();
+
             }
             else
             {
@@ -76,7 +85,6 @@ public class Player : MonoBehaviour {
 
                 FinishMovement();
 
-                //ProcessInputs.
             }
             GetInputsSPecialMov();
 
@@ -87,21 +95,36 @@ public class Player : MonoBehaviour {
 
     }
 
+    private void CheckComboCountdown()
+    {
+        if (comboTimerCountdown > 0)
+        {
+            Debug.Log(comboTimerCountdown   );
+            comboTimerCountdown -= Time.deltaTime;
+
+        }
+        else
+        {
+            Debug.Log("no combo");
+            canCombo = false;
+        }
+    }
+
     private void UpdateStates(float v)
     {
         movementCurrentElapsedTime += v;
     }
 
-    private bool controlLock = false;
-    public bool GetControlLock()
+    private bool comboActivated = false;
+    public bool CheckChain()
     {
-        controlLock = false;
+        comboActivated = false;
         for (int i = 0; i < currentSpecialMovement.controlIntervals.Length; i++)
         {
             if (movementCurrentElapsedTime > currentSpecialMovement.controlIntervals[i].start && movementCurrentElapsedTime < currentSpecialMovement.controlIntervals[i].end)
-                controlLock = true;
+                comboActivated = true;
         }
-        return controlLock;
+        return comboActivated;
     }
 
     void UpdateStates()
@@ -139,6 +162,7 @@ public class Player : MonoBehaviour {
     {
         if ( GetElapsedTime() >1)
         {
+            LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
             FunkManager.CompleteAction(currentSpecialMovement.action, playerID);
@@ -169,6 +193,11 @@ public class Player : MonoBehaviour {
     float GetElapsedTime()
     {
         return movementCurrentElapsedTime;
+    }
+
+    public void LoadComboCountdown(float timer)
+    {
+        comboTimerCountdown = timer;
     }
 
     void ProcessVelocitySpecialMovement()
@@ -210,8 +239,10 @@ public class Player : MonoBehaviour {
         if (playerID == Enums.Players.Player1)
         {
             if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+            {
+              //  Debug.Log("aa");
                 queuedMov = inputBAction;
-
+            }
             if (Input.GetKeyDown(KeyCode.Joystick1Button0))
                 queuedMov = inputAAction;
 
@@ -243,9 +274,19 @@ public class Player : MonoBehaviour {
                 queuedMov = inputXAction;
         }
 
+
+
         if (queuedMov != null)
             if (currentSpecialMovement == null)
                 LoadSpecialMovement(queuedMov);
+        else if (CheckChain() && queuedMov != currentSpecialMovement)
+            {
+                GetAxis();
+                ProcessInputs();
+                GetVelocity();
+                Debug.Log("Combo!");
+                LoadSpecialMovement(queuedMov);
+            }
     }
 
     void GetAxis()
@@ -315,11 +356,9 @@ public class Player : MonoBehaviour {
 
     private void Move()
     {
-        //float velY = rb.velocity.y;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
 		
-        
     }
 
 
@@ -332,6 +371,11 @@ public class Player : MonoBehaviour {
     {
         if (movement.velocityBiggerThan < rb.velocity.magnitude)
         {
+            if(canCombo)
+            {
+                Debug.Log("combo windows");
+                comboCB.Invoke();
+            }
             previousSpecialMovement = currentSpecialMovement;
             currentSpecialMovement = movement;
             ResetTime();
@@ -340,8 +384,10 @@ public class Player : MonoBehaviour {
             rb.velocity = velocity;
             extraMovement = velocity.normalized;
             specialMovementInitialVec = velocity.normalized;
+            canCombo = true;
 
-			if(movement.jumpVelocity > 0)
+
+            if (movement.jumpVelocity > 0)
 			{
 				animator.SetBool("IsJumping", true);
 			}

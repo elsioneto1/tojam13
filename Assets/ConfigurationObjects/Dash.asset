@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d875bb2ea067941ac5a3813fbb2f84, type: 3}
   m_Name: Dash
   m_EditorClassIdentifier: 
+  action: 0
   movementBehasviour:
     serializedVersion: 2
     m_Curve:
@@ -37,7 +38,7 @@ MonoBehaviour:
     m_RotationOrder: 0
   controlIntervals:
   - start: 0
-    end: 0
+    end: 1
   movementInitialForce: 1
   timeScaler: 0.8
   speedModifier: 4
@@ -47,3 +48,5 @@ MonoBehaviour:
   steeringAngle: 45
   velocityBiggerThan: 0
   grounded: 0
+  pointsOnSuccess: 10
+  pointsOnFailure: 10

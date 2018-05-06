@@ -31,8 +31,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   controlIntervals:
-  - start: 0
-    end: 0
+  - start: 0.8
+    end: 1
   movementInitialForce: 1
   timeScaler: 0.75
   speedModifier: 1
