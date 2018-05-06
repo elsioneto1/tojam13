@@ -31,15 +31,15 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   controlIntervals:
-  - start: 0.8
+  - start: 0.6
     end: 1
   movementInitialForce: 1
   timeScaler: 0.75
-  speedModifier: 1
+  speedModifier: 2
   jumpVelocity: 0
   applyHurricane: 1
   allowSteering: 1
-  steeringAngle: 20
+  steeringAngle: 10
   velocityBiggerThan: 0
   grounded: 0
   pointsOnSuccess: 10
