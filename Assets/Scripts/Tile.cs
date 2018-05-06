@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class Tile : MonoBehaviour
 {
 	Image image;
-	[SerializeField] private List<Sprite> player1Sprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> player2Sprites = new List<Sprite>();
-	[SerializeField] private List<Sprite> player3Sprites = new List<Sprite>();
+	//[SerializeField] private List<Sprite> player1Sprites = new List<Sprite>();
+	//[SerializeField] private List<Sprite> player2Sprites = new List<Sprite>();
+	//	[SerializeField] private List<Sprite> player3Sprites = new List<Sprite>();
 
-	Enums.ActionTypes myAction;
+	[SerializeField] private List<Sprite> actionList = new List<Sprite>();
+
+	//Enums.ActionTypes myAction;
 
 	private void Awake()
 	{
@@ -19,25 +21,39 @@ public class Tile : MonoBehaviour
 
 	public void SetTileAction(Enums.ActionTypes action)
 	{
-		myAction = action;
-	}
-
-	public void SetTileColor(Enums.Players playerNumber)
-	{
-		switch (playerNumber)
+		switch (action)
 		{
-			case Enums.Players.Player1:
-				image.sprite = player1Sprites[ (int)myAction ];
+			case Enums.ActionTypes.Slide:
+				image.sprite = actionList[ (int)action ];
 				break;
 
-			case Enums.Players.Player2:
-				image.sprite = player2Sprites[ (int)myAction ];
+			case Enums.ActionTypes.Jump:
+				image.sprite = actionList[ (int)action ];
 				break;
 
-			case Enums.Players.Player3:
-				image.sprite = player3Sprites[ (int)myAction ];
+			case Enums.ActionTypes.Hurricane:
+				image.sprite = actionList[ (int)action ];
 				break;
+		}	
 
-		}
 	}
+
+	//public void SetTileColor(Enums.Players playerNumber)
+	//{
+	//	switch (playerNumber)
+	//	{
+	//		//case Enums.Players.Player1:
+	//		//	image.sprite = player1Sprites[ (int)myAction ];
+	//		//	break;
+
+	//		//case Enums.Players.Player2:
+	//		//	image.sprite = player2Sprites[ (int)myAction ];
+	//		//	break;
+
+	//		//case Enums.Players.Player3:
+	//		//	image.sprite = player3Sprites[ (int)myAction ];
+	//		//	break;
+
+	//	}
+	//}
 }

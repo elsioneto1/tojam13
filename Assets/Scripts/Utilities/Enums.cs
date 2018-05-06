@@ -23,4 +23,10 @@ public class Enums
 		Player2,
 		Player3,
 	}
+
+	public enum Directions
+	{
+		Right,
+		Left,
+	}
 }

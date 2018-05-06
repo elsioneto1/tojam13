@@ -165,7 +165,8 @@ public class Player : MonoBehaviour {
             LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
-            FunkManager.CompleteAction(currentSpecialMovement.action, playerID);
+            //FunkManager.CompleteAction(currentSpecialMovement.action, playerID);
+			//TODO Mandar os parametros certos pra Complete Action Mr Elsio
             currentSpecialMovement = null;
             finishMovCB.Invoke();
 
