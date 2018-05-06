@@ -10558,7 +10558,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   canvas: {fileID: 1718965703}
-  comboHolderPositionList: []
+  comboHolders: []
   maxPoints: 0
   comboTimeFrame: 1
   PositivePointsCB:
@@ -19102,6 +19102,20 @@ Prefab:
       propertyPath: m_RootOrder
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: 1513254362893992, guid: 9be9447de8de8bb48ab00aa587a35069, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198213589856107834, guid: 9be9447de8de8bb48ab00aa587a35069,
+        type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 199073558342186358, guid: 9be9447de8de8bb48ab00aa587a35069,
+        type: 2}
+      propertyPath: m_MaxParticleSize
+      value: 0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9be9447de8de8bb48ab00aa587a35069, type: 2}
   m_IsPrefabParent: 0
@@ -24328,6 +24342,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  comboPrefab: {fileID: 0}
 --- !u!54 &1611806596
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29205,6 +29220,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  comboPrefab: {fileID: 0}
 --- !u!54 &1926403762
 Rigidbody:
   m_ObjectHideFlags: 0
