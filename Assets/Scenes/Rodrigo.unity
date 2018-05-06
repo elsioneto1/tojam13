@@ -3234,6 +3234,7 @@ MonoBehaviour:
   inputAAction: {fileID: 11400000, guid: 3d2af338930de3b48a22c3c42d3f3861, type: 2}
   inputXAction: {fileID: 11400000, guid: 5f7b06df18c549e429d2d0773f2bf4ba, type: 2}
   grounded: 0
+  bouncingPending: 0
   canCombo: 0
   currentActionSequence: 
   finishMovCB:
@@ -3246,6 +3247,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  comboPrefab: {fileID: 0}
 --- !u!54 &1611806596
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4185,6 +4187,7 @@ MonoBehaviour:
   inputAAction: {fileID: 11400000, guid: 3d2af338930de3b48a22c3c42d3f3861, type: 2}
   inputXAction: {fileID: 11400000, guid: 5f7b06df18c549e429d2d0773f2bf4ba, type: 2}
   grounded: 0
+  bouncingPending: 0
   canCombo: 0
   currentActionSequence: 
   finishMovCB:
@@ -4197,6 +4200,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  comboPrefab: {fileID: 1881862379606792, guid: 45b3744328cf93a4cafdb43d5da3562b,
+    type: 2}
 --- !u!54 &1926403762
 Rigidbody:
   m_ObjectHideFlags: 0
