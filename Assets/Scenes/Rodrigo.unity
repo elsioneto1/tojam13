@@ -3012,6 +3012,18 @@ MonoBehaviour:
   countdown: {fileID: 0}
   waveList:
   - {fileID: 11400000, guid: 8d10409b211cc934bab9aa71af3a3c53, type: 2}
+  - {fileID: 11400000, guid: 50823590f32ffbd4b9c71809787037bc, type: 2}
+  - {fileID: 11400000, guid: 8b5dc876d0eb1ef4fab40b52ec1cf4ce, type: 2}
+  - {fileID: 11400000, guid: 7f2ac7ddbd431994bbbe1f851fea5077, type: 2}
+  - {fileID: 11400000, guid: 83bd1ba2622c8bf4493d25b841d09732, type: 2}
+  - {fileID: 11400000, guid: 92026b95e8328564db2eca3b8ad7f26e, type: 2}
+  - {fileID: 11400000, guid: 8da145659070996418f595e8942dd988, type: 2}
+  - {fileID: 11400000, guid: d3b9276495dadd74c8741a0190f77419, type: 2}
+  - {fileID: 11400000, guid: 65d847eaab2e45d43b501d43d442855d, type: 2}
+  - {fileID: 11400000, guid: e0aea5f84f5c2e345aba7b9252fcb1bf, type: 2}
+  - {fileID: 11400000, guid: 059bead2c5d16ef459c2f6f972d78665, type: 2}
+  - {fileID: 11400000, guid: 32336e1f4dc6dbd4689ba2dc66256ec0, type: 2}
+  - {fileID: 11400000, guid: d660c8912eee4b947b960018a1fa2615, type: 2}
   canvas: {fileID: 1718965703}
   comboHolders:
   - {fileID: 1245374559}
