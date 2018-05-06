@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CrowdGravity : MonoBehaviour {
     public static float vectorPower = 1f;
@@ -15,8 +16,14 @@ public class CrowdGravity : MonoBehaviour {
             entities = FindObjectsOfType<CrowdEntity>();
 
         S_INSTANCE = this;
-       // sphereCollider = GetComponent<SphereCollider>();
+        // sphereCollider = GetComponent<SphereCollider>();
+        SceneManager.sceneUnloaded += Clear;
     }
+    void Clear(Scene s)
+    {
+        entities = null;
+    }
+    
 
     // Update is called once per frame
     void Update()
