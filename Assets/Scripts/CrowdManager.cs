@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CrowdManager : MonoBehaviour {
     public static float vectorPower = 0.9f;
@@ -38,6 +39,13 @@ public class CrowdManager : MonoBehaviour {
             mainManager = this;
             mainManagerStartPos = transform.position;
         }
+        SceneManager.sceneUnloaded += Clear;
+    }
+
+    void Clear(Scene s )
+    {
+        mainManager = null;
+        allManagers = null;
     }
 
     public static CrowdManager GetInstanceManager(ColliderType type)
