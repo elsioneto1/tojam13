@@ -150,16 +150,16 @@ public class FunkManager : MonoBehaviour
 
 	}
 
-	public static void CompleteAction(WaveSet combo)
+	public static bool CompleteAction(List<Enums.ActionTypes> comboList)
 	{	
 		if (singleton.waveCombos.Count == 0)
-			return;
+			return false;
 
 		for(int i = 0; i < singleton.waveCombos.Count; i ++)
 		{
 			for(int k = 0; k < singleton.waveCombos[i].actions.Count; k++)
 			{
-				if(singleton.waveCombos[ i ].actions[k] != combo.actions[k])
+				if(singleton.waveCombos[ i ].actions[k] != comboList[k])
 				{
 					break;
 				}
@@ -169,11 +169,15 @@ public class FunkManager : MonoBehaviour
 					singleton.DestroyTiles(i);
 					singleton.waveCombos.Remove(singleton.waveCombos[ i ]);
 					singleton.ModifyPoints(1);
-				}
+                    comboList.Clear();
+                    return true;
+
+                }
 			}	
 		}
 
 		singleton.CheckLevel();
+        return false;
 	}
 
 	private void CheckLevel()
