@@ -36,7 +36,7 @@ MonoBehaviour:
   movementInitialForce: 1
   timeScaler: 1
   speedModifier: 5
-  jumpVelocity: 5
+  jumpVelocity: 4
   applyHurricane: 0
   allowSteering: 0
   steeringAngle: 1

@@ -11,5 +11,8 @@ public class Menu : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button7))
                 SceneManager.LoadScene(sceneToLoad);
+
+        else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
+            SceneManager.LoadScene(sceneToLoad);
     }
 }
