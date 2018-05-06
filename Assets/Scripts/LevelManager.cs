@@ -63,6 +63,12 @@ public class LevelManager : MonoBehaviour {
         currentIndex++;
         if (currentIndex < levelSequence.Length )
             StartCoroutine(LevelStart());
+        else
+        {
+            currentIndex = 0;
+            StartCoroutine(LevelStart());
+
+        }
     }
 
     IEnumerator SetManager(LevelConfig lvlConfig)
