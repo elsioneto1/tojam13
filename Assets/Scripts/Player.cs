@@ -175,6 +175,7 @@ public class Player : MonoBehaviour {
 			else if(animator.GetBool("CompletedJump") && animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
 			{
 				animator.SetBool("CompletedJump", false);
+                animator.SetBool("IsJumping", false);
                
             }
 
@@ -494,7 +495,7 @@ public class Player : MonoBehaviour {
                 StartCoroutine(ResetEntityCheck());
                 FunkManager.S_INSTANCE.ModifyPoints(-1);
                 sefodeuCB.Invoke();
-                currentActionSequence.Clear();
+
             }
         }
 

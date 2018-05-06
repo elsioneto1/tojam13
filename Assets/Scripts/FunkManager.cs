@@ -241,7 +241,7 @@ public class FunkManager : MonoBehaviour
                     {
                         singleton.DestroyTiles(i);
                         singleton.waveCombos.Remove(singleton.waveCombos[i]);
-                        singleton.ModifyPoints(1);
+                        singleton.ModifyPoints(2);
                         singleton.combosCompleted--;
                         comboList.Clear();
                         return true;

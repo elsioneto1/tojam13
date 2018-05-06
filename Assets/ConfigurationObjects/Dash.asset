@@ -41,7 +41,7 @@ MonoBehaviour:
     end: 1
   movementInitialForce: 1
   timeScaler: 0.8
-  speedModifier: 2.5
+  speedModifier: 2
   jumpVelocity: 0
   applyHurricane: 0
   allowSteering: 0
