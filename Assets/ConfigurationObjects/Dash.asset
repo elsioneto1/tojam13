@@ -48,5 +48,5 @@ MonoBehaviour:
   steeringAngle: 45
   velocityBiggerThan: 0
   grounded: 0
-  pointsOnSuccess: 10
-  pointsOnFailure: 10
+  pointsOnSuccess: 1
+  pointsOnFailure: -1

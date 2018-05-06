@@ -109,6 +109,7 @@ public class Player : MonoBehaviour {
         {
             Debug.Log("no combo");
             canCombo = false;
+            currentActionSequence.Clear();
         }
     }
 
@@ -170,7 +171,6 @@ public class Player : MonoBehaviour {
         {
             LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
-            FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
             FunkManager.CompleteAction(currentActionSequence);
 
             currentSpecialMovement = null;
@@ -400,7 +400,7 @@ public class Player : MonoBehaviour {
             specialMovementInitialVec = velocity.normalized;
             canCombo = true;
 
-
+            currentActionSequence.Add(currentSpecialMovement.action);
             if (movement.jumpVelocity > 0)
 			{
 				animator.SetBool("IsJumping", true);
