@@ -494,7 +494,7 @@ public class Player : MonoBehaviour {
                 StartCoroutine(ResetEntityCheck());
                 FunkManager.S_INSTANCE.ModifyPoints(-1);
                 sefodeuCB.Invoke();
-
+                currentActionSequence.Clear();
             }
         }
 
