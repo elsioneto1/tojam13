@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: WaveSet4
   m_EditorClassIdentifier: 
   FirstSet:
-    actions: 00000000010000000100000000000000
+    actions: 00000000010000000200000000000000
   SecondSet:
-    actions: 02000000000000000000000002000000
+    actions: 02000000000000000100000002000000
   ThirdSet:
     actions: 00000000010000000200000000000000
   totalWaveTime: 12

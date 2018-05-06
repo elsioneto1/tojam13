@@ -40,7 +40,7 @@ MonoBehaviour:
   applyHurricane: 0
   allowSteering: 0
   steeringAngle: 1
-  velocityBiggerThan: 0
+  velocityBiggerThan: 0.2
   grounded: 0
   pointsOnSuccess: 1
   pointsOnFailure: -1
