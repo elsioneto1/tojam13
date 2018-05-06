@@ -8,64 +8,61 @@ public class CrowdEntity : MonoBehaviour {
     public static float speed;
 
     public GameObject[] objectsNearby;
-    public CrowdManager crowdManagerComp;
+    public GameObject[] registeredColliders;
+    //public CrowdGravity gravityComponent;
     public Vector3 movementVec;
+    private SpriteRenderer rendererComp;
+
 	// Use this for initialization
 	void Start () {
 
         objectsNearby = new GameObject[10]; // max of 10 objects
-
+        registeredColliders = new GameObject[10];
+        rendererComp = GetComponent<SpriteRenderer>();
+        rendererComp.sprite = SpritePool.S_INSTANCE.pool[Mathf.RoundToInt(Random.Range(0, SpritePool.S_INSTANCE.pool.Length-1))];
     }
 	
 	// Update is called once per frame
 	public void CustomUpdate () {
         if (gameObject.activeSelf)
-        transform.position -= movementVec * Time.deltaTime;
+            transform.position -= movementVec * Time.deltaTime;
 	}
 
-    public void ProcessMovementVector(GameObject crowdManager)
+    public void ProcessMovementVector(GameObject gravityComponent)
     {
 
         if (!gameObject.activeSelf)
             return;
         Vector3 entitityResultant = Vector3.zero;
         Vector3 managerResultant = Vector3.zero;
+        bool insideCollider = false;
+
         for (int i = 0; i < objectsNearby.Length; i++)
         {
             if (objectsNearby[i] != null)
-            {
-                if (objectsNearby[i].tag == "CrowdEntitity")
-                {
-                    entitityResultant += ( transform.position - objectsNearby[i].transform.position ).normalized ;
-                }
-               
+            { 
+                entitityResultant += ( transform.position - objectsNearby[i].transform.position ).normalized ;  
             }
-           
-
-        }
-
-        bool tooCloseFromCenter = false;
-        if (crowdManagerComp != null)
-        {
-            managerResultant += (transform.position - crowdManagerComp.transform.position).normalized;
-        }
-        else 
-        {
-
-            managerResultant = (crowdManager.transform.position - transform.position).normalized;
-        }
-
-        if (crowdManagerComp != null && crowdManagerComp.sphereCollider)
-        {
-            if ( (Vector3.Distance(crowdManagerComp.transform.position,transform.position)/ crowdManagerComp.sphereCollider.radius) < 0.99f)
+            if (registeredColliders[i] != null)
             {
-                tooCloseFromCenter = true;
+                managerResultant += (transform.position - registeredColliders[i].transform.position).normalized;
+                insideCollider = true;
+                
             }
         }
+        float compensation = insideCollider ? 0.09f : 0;
+        managerResultant *= (CrowdManager.vectorPower + compensation);
+
+        if (managerResultant == Vector3.zero && gravityComponent != null)
+        {
+            managerResultant += (gravityComponent.transform.position - transform.position).normalized;
+            managerResultant *= CrowdGravity.vectorPower;
+        }
+        
+        
+
         entitityResultant.Normalize();
-        float compensation = tooCloseFromCenter ? 0.5f : 0;
 
-        managerResultant *= (CrowdManager.vectorPower  +compensation);
         movementVec = -(entitityResultant + managerResultant).normalized ;
         movementVec.y = 0;
 
@@ -73,35 +70,56 @@ public class CrowdEntity : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        bool checkForCollider = false;
         if (other.gameObject.tag == "CrowdManager")
         {
-            crowdManagerComp = other.gameObject.GetComponent<CrowdManager>();
-            return;
+            checkForCollider = true;
         }
         for (int i = 0; i < objectsNearby.Length; i++)
         {
-            if (objectsNearby[i] == null)
+            if (!checkForCollider)
             {
-                objectsNearby[i] = other.gameObject;
-               
-                break;
+                if (objectsNearby[i] == null)
+                {
+                    objectsNearby[i] = other.gameObject;
+                    break;
+                }
+            }
+            else
+            {
+                if (registeredColliders[i] == null)
+                {
+                    registeredColliders[i] = other.gameObject;
+                    break;
+                }
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        bool checkForCollider = false;
         if (other.gameObject.tag == "CrowdManager")
         {
-            crowdManagerComp = null;
-            return;
+            checkForCollider = true;
         }
         for (int i = 0; i < objectsNearby.Length; i++)
         {
-            if (objectsNearby[i] == other.gameObject)
+            if (!checkForCollider)
             {
-                objectsNearby[i] = null;
-                break;
+                if (objectsNearby[i] == other.gameObject)
+                {
+                    objectsNearby[i] = null;
+                    break;
+                }
+            }
+            else
+            {
+                if (registeredColliders[i] == other.gameObject)
+                {
+                    registeredColliders[i] = null;
+                    break;
+                }
             }
         }
     }
