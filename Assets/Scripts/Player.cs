@@ -502,7 +502,7 @@ public class Player : MonoBehaviour {
 
     IEnumerator ResetEntityCheck()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(1f);
         canCheckFOrEntities = true;
     }
 

@@ -23,6 +23,7 @@ public class FunkManager : MonoBehaviour
     [SerializeField] private Canvas canvas;
     public List<GameObject> comboHolders;
     private List<GameObject> actualComboHolders;
+    public GameObject comboHolder1, comboHolder2, comboHolder3;
     private List<GameObject> waveTiles = new List<GameObject>();
     //	private List<GameObject> player3Tiles = new List<GameObject>();
 
@@ -64,7 +65,6 @@ public class FunkManager : MonoBehaviour
     {
         while (true)
         {
-
             waveCombos.Add(waveList[currentSet].FirstSet);
             waveCombos.Add(waveList[currentSet].SecondSet);
             waveCombos.Add(waveList[currentSet].ThirdSet);
@@ -91,12 +91,15 @@ public class FunkManager : MonoBehaviour
             //if(waveCompleted)
             //WIN AND LOSE
             yield return new WaitForSeconds(resetTime);
-            //Limpa tudo que tiver que limpar, comeca de novo, proxima wave ou end
-            ResetUI();
+
+
             if(currentSet + 1 < waveList.Count)
             {
                 currentSet++;
-                actualComboHolders = comboHolders;
+                actualComboHolders = new List<GameObject>();
+                actualComboHolders.Add(comboHolder1);
+                actualComboHolders.Add(comboHolder2);
+                actualComboHolders.Add(comboHolder3);
             }
         }
     }
