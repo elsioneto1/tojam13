@@ -37,6 +37,7 @@ public class Player : MonoBehaviour {
     [HideInInspector]
     public bool grounded;
     private bool stunned;
+    public bool bouncingPending;
 
     //components
     private Rigidbody rb;
@@ -101,13 +102,13 @@ public class Player : MonoBehaviour {
     {
         if (comboTimerCountdown > 0)
         {
-            Debug.Log(comboTimerCountdown   );
+
             comboTimerCountdown -= Time.deltaTime;
 
         }
         else
         {
-            Debug.Log("no combo");
+
             canCombo = false;
             currentActionSequence.Clear();
         }
@@ -172,7 +173,7 @@ public class Player : MonoBehaviour {
             LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.CompleteAction(currentActionSequence);
-
+            bouncingPending = false;
             currentSpecialMovement = null;
             finishMovCB.Invoke();
 
@@ -214,8 +215,8 @@ public class Player : MonoBehaviour {
 
     void ProcessVelocitySpecialMovement()
     {
-        
-        velocity = specialMovementInitialVec * currentSpecialMovement.movementBehasviour.Evaluate(GetElapsedTime()) * currentSpecialMovement.speedModifier;
+        Vector3 init = bouncingPending ? -specialMovementInitialVec : specialMovementInitialVec;
+        velocity = init * currentSpecialMovement.movementBehasviour.Evaluate(GetElapsedTime()) * currentSpecialMovement.speedModifier;
         
         if (currentSpecialMovement.allowSteering)
         {
@@ -299,6 +300,7 @@ public class Player : MonoBehaviour {
                 ProcessInputs();
                 GetVelocity();
                 Debug.Log("Combo!");
+                bouncingPending = false;
                 LoadSpecialMovement(queuedMov);
             }
     }
@@ -399,6 +401,7 @@ public class Player : MonoBehaviour {
             extraMovement = velocity.normalized;
             specialMovementInitialVec = velocity.normalized;
             canCombo = true;
+            bouncingPending = false;
 
             currentActionSequence.Add(currentSpecialMovement.action);
             if (movement.jumpVelocity > 0)
@@ -452,5 +455,17 @@ public class Player : MonoBehaviour {
         
     }
 
+    public void SetVelocity(Vector3 v)
+    {
+
+        velocity = v;
+        rb.velocity = velocity;
+
+    }
+
+    public Vector3 GetVelocityRB()
+    {
+        return velocity;
+    }
 
 }
