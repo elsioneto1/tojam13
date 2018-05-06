@@ -56,6 +56,8 @@ public class Player : MonoBehaviour {
     public UnityEvent finishMovCB;
     public UnityEvent comboCB;
     // Use this for initialization
+    private float crowdCheckCooldown = 0.1f;
+    private bool canCheckFOrEntities = true;
     void Start() {
 		animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -433,21 +435,40 @@ public class Player : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.gameObject.tag == "Player")
+        //if (collision.gameObject.tag == "Player")
+        //{
+
+        //    Debug.Log("Lose Point");
+        //    ResetVariables();
+        //    stunned = true;
+        //    Vector3 vel;
+        //    grounded = false;
+        //    velocity = Vector3.zero;
+        //    extraMovement = Vector3.zero;
+        //    vel = (  transform.position - collision.gameObject.transform.position).normalized * 2;
+        //    vel.y = 2;
+        //    rb.velocity = vel;
+
+        //}
+    
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        CrowdEntity ce = other.gameObject.GetComponent<CrowdEntity>();
+        if (ce != null && canCheckFOrEntities)
         {
-
-            Debug.Log("Lose Point");
-            ResetVariables();
-            stunned = true;
-            Vector3 vel;
-            grounded = false;
-            velocity = Vector3.zero;
-            extraMovement = Vector3.zero;
-            vel = (  transform.position - collision.gameObject.transform.position).normalized * 2;
-            vel.y = 2;
-            rb.velocity = vel;
-
+            bouncingPending = !bouncingPending;
+            canCheckFOrEntities = false;
+            StartCoroutine(ResetEntityCheck());
         }
+
+    }
+
+    IEnumerator ResetEntityCheck()
+    {
+        yield return new WaitForSeconds(0.05f);
+        canCheckFOrEntities = true;
     }
 
     private void OnCollisionExit(Collision collision)
