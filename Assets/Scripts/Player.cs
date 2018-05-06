@@ -50,6 +50,8 @@ public class Player : MonoBehaviour {
 
     public bool canCombo = false;
 
+    public List<Enums.ActionTypes> currentActionSequence = new List<Enums.ActionTypes>();
+
     public UnityEvent finishMovCB;
     public UnityEvent comboCB;
     // Use this for initialization
@@ -165,8 +167,8 @@ public class Player : MonoBehaviour {
             LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
             FunkManager.S_INSTANCE.ModifyPoints(currentSpecialMovement.pointsOnSuccess);
-            //FunkManager.CompleteAction(currentSpecialMovement.action, playerID);
-			//TODO Mandar os parametros certos pra Complete Action Mr Elsio
+            FunkManager.CompleteAction(currentActionSequence);
+
             currentSpecialMovement = null;
             finishMovCB.Invoke();
 
@@ -194,6 +196,11 @@ public class Player : MonoBehaviour {
     float GetElapsedTime()
     {
         return movementCurrentElapsedTime;
+    }
+
+    void SetElapsedTime(float time ) // KIKI EU TO FAZENDO??
+    {
+        movementCurrentElapsedTime = time;
     }
 
     public void LoadComboCountdown(float timer)
@@ -282,6 +289,8 @@ public class Player : MonoBehaviour {
                 LoadSpecialMovement(queuedMov);
         else if (CheckChain() && queuedMov != currentSpecialMovement)
             {
+                SetElapsedTime(1);
+                FinishMovement();
                 GetAxis();
                 ProcessInputs();
                 GetVelocity();
