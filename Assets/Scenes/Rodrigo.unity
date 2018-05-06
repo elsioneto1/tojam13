@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073996, b: 0.35872692, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 29777770}
   - component: {fileID: 29777769}
   m_Layer: 5
-  m_Name: TileHolder2
+  m_Name: ComboHolder2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 216.4}
+  m_AnchoredPosition: {x: -145, y: 216.4}
   m_SizeDelta: {x: 321, y: 257}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &29777769
@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 411033998}
   - component: {fileID: 411033997}
   m_Layer: 5
-  m_Name: TileHolder3
+  m_Name: ComboHolder3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,7 +685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: 216.4}
+  m_AnchoredPosition: {x: 75, y: 216.4}
   m_SizeDelta: {x: 321, y: 257}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &411033997
@@ -1191,21 +1191,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b02ce38d75a904746a9532fa7663dc8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preparingTime: 2
+  timeBetweenCombos: 0
   resetTime: 1
   tilePrefab: {fileID: 1383354243585610, guid: 21977f5e64111f64bb453d2f8d4b4184, type: 2}
   countdown: {fileID: 483649551}
   waveList:
   - {fileID: 11400000, guid: 8d10409b211cc934bab9aa71af3a3c53, type: 2}
-  - {fileID: 11400000, guid: 2264ae911b42b7b418f01a1043bb60f7, type: 2}
-  - {fileID: 11400000, guid: bafb3b80eafd4994997461265f392fde, type: 2}
-  - {fileID: 11400000, guid: 130e805edd3ec6f40a6d00b381d7f2d5, type: 2}
-  - {fileID: 11400000, guid: 67965fc131455de4982ec7d4f16900a7, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   canvas: {fileID: 1718965703}
-  tileHolderPositionList:
-  - {fileID: 1245374560}
-  - {fileID: 29777768}
-  - {fileID: 411033996}
+  comboHolderPositionList: []
   maxPoints: 0
   comboTimeFrame: 1
   PositivePointsCB:
@@ -1588,6 +1585,74 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &854735548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 854735549}
+  - component: {fileID: 854735551}
+  - component: {fileID: 854735550}
+  m_Layer: 5
+  m_Name: ComboHolder4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &854735549
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 854735548}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -33.205627}
+  m_LocalScale: {x: 0.4999999, y: 0.4999999, z: 0.4999999}
+  m_Children: []
+  m_Father: {fileID: 1718965704}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 295, y: 216.40002}
+  m_SizeDelta: {x: 321, y: 257}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &854735550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 854735548}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.49019608, g: 1, b: 0.49019608, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 95da2a0acfb047a4a8e79ebe1b38f850, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &854735551
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 854735548}
 --- !u!1 &1030222746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2230,7 +2295,7 @@ GameObject:
   - component: {fileID: 1245374562}
   - component: {fileID: 1245374561}
   m_Layer: 5
-  m_Name: TileHolder1
+  m_Name: ComboHolder1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2251,7 +2316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: 216.4}
+  m_AnchoredPosition: {x: -365, y: 216.4}
   m_SizeDelta: {x: 321, y: 257}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1245374561
@@ -2646,6 +2711,69 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c51738f0ae78afb47ac6d601b31f0487, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1495170821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1495170823}
+  - component: {fileID: 1495170822}
+  m_Layer: 0
+  m_Name: FunkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1495170822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1495170821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02ce38d75a904746a9532fa7663dc8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenCombos: 3
+  resetTime: 1
+  tilePrefab: {fileID: 1383354243585610, guid: 21977f5e64111f64bb453d2f8d4b4184, type: 2}
+  countdown: {fileID: 0}
+  waveList:
+  - {fileID: 11400000, guid: 8d10409b211cc934bab9aa71af3a3c53, type: 2}
+  canvas: {fileID: 1718965703}
+  comboHolderPositionList:
+  - {fileID: 1245374560}
+  - {fileID: 29777768}
+  - {fileID: 411033996}
+  maxPoints: 100
+  comboTimeFrame: 1
+  PositivePointsCB:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  NegativePointsCB:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!4 &1495170823
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1495170821}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600004248
 GameObject:
   m_ObjectHideFlags: 0
@@ -3325,6 +3453,7 @@ RectTransform:
   - {fileID: 1245374560}
   - {fileID: 29777768}
   - {fileID: 411033996}
+  - {fileID: 854735549}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -9,7 +9,7 @@ public class FunkManager : MonoBehaviour
     public static FunkManager S_INSTANCE;
 
 	[Header("Common Attributes")]
-	public int preparingTime;
+	public int timeBetweenCombos;
 	public int resetTime;
 	[SerializeField] private GameObject tilePrefab;
 	[SerializeField] private Countdown countdown;	
@@ -20,15 +20,15 @@ public class FunkManager : MonoBehaviour
 
 	[Header("UI")]
 	[SerializeField] private Canvas canvas;
-	public List<RectTransform> tileHolderPositionList;
+	public List<RectTransform> comboHolderPositionList;
 
-	private List<GameObject> player1Tiles = new List<GameObject>();
-	private List<GameObject> player2Tiles = new List<GameObject>();
-	private List<GameObject> player3Tiles = new List<GameObject>();
+	private List<GameObject> waveTiles = new List<GameObject>();
+	//	private List<GameObject> player3Tiles = new List<GameObject>();
 
-	private List<Enums.ActionTypes> player1Actions = new List<Enums.ActionTypes>();
-	private List<Enums.ActionTypes> player2Actions = new List<Enums.ActionTypes>();
-	private List<Enums.ActionTypes> player3Actions = new List<Enums.ActionTypes>();
+	//private List<Enums.ActionTypes> player1Actions = new List<Enums.ActionTypes>();
+	//private List<Enums.ActionTypes> player2Actions = new List<Enums.ActionTypes>();
+	//private List<Enums.ActionTypes> player3Actions = new List<Enums.ActionTypes>();
+	private List<WaveSet> waveCombos = new List<WaveSet>();
 
     public static FunkManager singleton;
 	private bool waveCompleted = false;
@@ -38,6 +38,7 @@ public class FunkManager : MonoBehaviour
 
     public float comboTimeFrame = 1;
 
+	private int combosCompleted = 0;
 
     public UnityEvent PositivePointsCB;
     public UnityEvent NegativePointsCB;
@@ -55,23 +56,30 @@ public class FunkManager : MonoBehaviour
 		while(currentSet < waveList.Count)
 		{
 			int time = waveList[ currentSet ].totalWaveTime;
-			List<WaveSet> tempList = new List<WaveSet>();
 
-			tempList.Add(waveList[currentSet].FirstSet);
-			tempList.Add(waveList[currentSet].SecondSet);
-			tempList.Add(waveList[currentSet].ThirdSet);
-			tempList.Shuffle();
+			waveCombos.Add(waveList[currentSet].FirstSet);
+			waveCombos.Add(waveList[currentSet].SecondSet);
+			waveCombos.Add(waveList[currentSet].ThirdSet);
+			//waveCombos.Add(waveList[currentSet].FourthSet);
+			waveCombos.Shuffle();
 
-			BuildPlayerTiles(tempList);
+			combosCompleted = waveCombos.Count;
+			BuildPlayerTiles(waveCombos);
 
 			yield return new WaitForSeconds(1);
-			ScrollTilesDown(player1Tiles, 1, 1);
-			ScrollTilesDown(player2Tiles, 1, 1);
-			ScrollTilesDown(player3Tiles, 1, 1);
-			yield return new WaitForSeconds(preparingTime);
-			countdown.SetTime(waveList[ currentSet ].totalWaveTime);
+			ScrollTilesDown(0, 1, 1);
+			ScrollTilesDown(1, 1, 1);
+			ScrollTilesDown(2, 1, 1);
+			//yield return new WaitForSeconds(timeBetweenCombos);
+			//ScrollTilesDown(3, 1, 1);
+		//	ScrollTilesDown(player3Tiles, 1, 1);
+			//yield return new WaitForSeconds(preparingTime);
+			//countdown.SetTime(waveList[ currentSet ].totalWaveTime);
 			//Libera os botoes dos jogadores
-			yield return new WaitForSeconds(waveList[ currentSet ].totalWaveTime);
+					//yield return new WaitForSeconds(waveList[ currentSet ].totalWaveTime);
+
+			while (combosCompleted > 0)
+				yield return null;
 			//Cabou o tempo, computar score, reseta
 			//if(waveCompleted)
 			//WIN AND LOSE
@@ -88,127 +96,81 @@ public class FunkManager : MonoBehaviour
 	{
 		waveCompleted = false;
 
-		List<GameObject> tileObjectList = new List<GameObject>();
-
-		for (int i = 0; i < tileHolderPositionList.Count; ++i)
+		for (int i = 0; i < comboHolderPositionList.Count; ++i)
 		{
-			for (int k  = 0; k < randomizedList[i].wave.Count; ++k)
+			for (int k  = 0; k < randomizedList[i].actions.Count; ++k)
 			{
 				GameObject tile = Instantiate(tilePrefab, Vector3.zero, Quaternion.identity);
 				Tile t = tile.GetComponent<Tile>();
-				t.SetTileAction(randomizedList[ i ].wave[ k ]);
-				t.SetTileColor((Enums.Players)i);
+				t.SetTileAction(randomizedList[ i ].actions[ k ]);
+				//t.SetTileColor((Enums.Players)i);
 				tile.transform.SetParent(canvas.transform);
-				tile.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-				tile.GetComponent<RectTransform>().anchoredPosition3D = tileHolderPositionList[ i ].anchoredPosition3D + new Vector3(0, 50 * (k + 1), 0);
-				tileObjectList.Add(tile);
+				tile.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+				tile.GetComponent<RectTransform>().anchoredPosition3D = comboHolderPositionList[ i ].anchoredPosition3D + new Vector3(48 * k, 50, 0);
 
-				if (i == 0)
-				{
-					player1Actions.Add(randomizedList[ i ].wave[ k ]);
-					player1Tiles.Add(tile);
-				}
-					
-				else if (i == 1)
-				{
-					player2Actions.Add(randomizedList[ i ].wave[ k ]);
-					player2Tiles.Add(tile);
-				}
-				else if (i == 2)
-				{
-					player3Actions.Add(randomizedList[ i ].wave[ k ]);
-					player3Tiles.Add(tile);
-				}
+				waveTiles.Add(tile);
 			}
 		}
 	}
 
 	private void ResetUI()
 	{
-		for(int i = player1Tiles.Count - 1; i >= 0; --i)
+		for(int i = waveTiles.Count - 1; i >= 0; --i)
 		{
-			Destroy(singleton.player1Tiles[i]);
+			Destroy(singleton.waveTiles[i]);
 		}
-		for(int i = player2Tiles.Count - 1; i >= 0; --i)
-		{
-			Destroy(singleton.player2Tiles[i]);
-		}
-		for(int i = player3Tiles.Count - 1; i >= 0; --i)
-		{
-			Destroy(singleton.player3Tiles[i]);
-		}
+		waveCombos.Clear();
+		waveTiles.Clear();
 
-		player1Actions.Clear();
-		player2Actions.Clear();
-		player3Actions.Clear();
-		player1Tiles.Clear();
-		player2Tiles.Clear();
-		player3Tiles.Clear();
+		//for(int i = player3Tiles.Count - 1; i >= 0; --i)
+		//{
+		//	Destroy(singleton.player3Tiles[i]);
+		//}	
+		
+		//player2Actions.Clear();
+		//player3Actions.Clear();
+	
+		//player3Tiles.Clear();
 	}
 
-	private void ScrollTilesDown(List<GameObject> tileObjects, int units, float time)
+	private void ScrollTilesDown(int index, int units, float time)
 	{
-		foreach(GameObject go in tileObjects)
+		for (int i = index * waveCombos[index].actions.Count; i < (index + 1) * waveCombos[index].actions.Count; i++)
 		{
-			iTween.MoveTo(go, go.transform.position + new Vector3(0, -140 * units, 0), time);
+			iTween.MoveTo(waveTiles[i], waveTiles[i].transform.position + new Vector3(0, -140 * units, 0), time);
 		}
 	}
 
-	public static void CompleteAction(Enums.ActionTypes action, Enums.Players playerNumber)
+	private void DestroyTiles(int index)
 	{
-		switch (playerNumber)
+		for (int i = ((index + 1) * waveCombos[index].actions.Count) - 1 ; i >= index * waveCombos[index].actions.Count; i--)
 		{
-			case Enums.Players.Player1:
-				if (singleton.player1Actions.Count == 0)
-					return;
+			Destroy(waveTiles[ i ]);
+		}
 
-				else if (singleton.player1Actions[ 0 ] == action)
+	}
+
+	public static void CompleteAction(WaveSet combo)
+	{	
+		if (singleton.waveCombos.Count == 0)
+			return;
+
+		for(int i = 0; i < singleton.waveCombos.Count; i ++)
+		{
+			for(int k = 0; k < singleton.waveCombos[i].actions.Count; k++)
+			{
+				if(singleton.waveCombos[ i ].actions[k] != combo.actions[k])
 				{
-					Destroy(singleton.player1Tiles[0]);
-					singleton.player1Actions.Remove(singleton.player1Actions[ 0 ]);
-					singleton.player1Tiles.Remove(singleton.player1Tiles[ 0 ]);
-
-					if(singleton.player1Actions.Count > 0)
-					{
-						singleton.ScrollTilesDown(singleton.player1Tiles,1,1);
-					}
+					break;
 				}
-				break;
-
-			case Enums.Players.Player2:
-				if (singleton.player2Actions.Count == 0)
-					return;
-
-				else if (singleton.player2Actions[ 0 ] == action)
+				else
 				{
-					Destroy(singleton.player2Tiles[0]);
-					singleton.player2Actions.Remove(singleton.player2Actions[ 0 ]);
-					singleton.player2Tiles.Remove(singleton.player2Tiles[ 0 ]);
-
-					if(singleton.player2Actions.Count > 0)
-					{
-						singleton.ScrollTilesDown(singleton.player2Tiles,1,1);
-					}
+					singleton.combosCompleted--;
+					singleton.DestroyTiles(i);
+					singleton.waveCombos.Remove(singleton.waveCombos[ i ]);
+					singleton.ModifyPoints(1);
 				}
-				break;
-
-			case Enums.Players.Player3:
-
-				if (singleton.player3Actions.Count == 0)
-					return;
-
-				else if (singleton.player3Actions[ 0 ] == action)
-				{
-					Destroy(singleton.player3Tiles[0]);
-					singleton.player3Actions.Remove(singleton.player3Actions[ 0 ]);
-					singleton.player3Tiles.Remove(singleton.player3Tiles[ 0 ]);
-
-					if(singleton.player3Actions.Count > 0)
-					{
-						singleton.ScrollTilesDown(singleton.player3Tiles,1,1);
-					}
-				}
-				break;
+			}	
 		}
 
 		singleton.CheckLevel();
@@ -216,7 +178,7 @@ public class FunkManager : MonoBehaviour
 
 	private void CheckLevel()
 	{
-		if(player1Actions.Count == 0 && player2Actions.Count == 0 && player3Actions.Count == 0)
+		if(waveCombos.Count == 0)// && player3Actions.Count == 0)
 		{
 			waveCompleted = true;
 		}
@@ -227,7 +189,7 @@ public class FunkManager : MonoBehaviour
 
         if (points > 0)
         {
-
+			this.points += points;
             //this.points += points * successStreak;
             //successStreak += 0.1f;
             //if (successStreak > 2)
@@ -241,10 +203,10 @@ public class FunkManager : MonoBehaviour
             NegativePointsCB.Invoke();
         }
 
-        if (points < 0)
-            points = 0;
-        if (points > maxPoints)
-            points = maxPoints;
+        if (this.points < 0)
+            this.points = 0;
+        if (this.points > maxPoints)
+			this.points = maxPoints;
 
         
     }

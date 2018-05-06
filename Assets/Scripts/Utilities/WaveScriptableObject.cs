@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WaveSet", menuName = "Waves")]
 public class WaveScriptableObject :  ScriptableObject
 {
-	public WaveSet FirstSet, SecondSet, ThirdSet;
+	public WaveSet FirstSet, SecondSet, ThirdSet; //FourthSet;
 	public int totalWaveTime;
 	
 }
@@ -13,5 +13,5 @@ public class WaveScriptableObject :  ScriptableObject
 [System.Serializable]
 public class WaveSet
 {
-	public List<Enums.ActionTypes> wave;
+	public List<Enums.ActionTypes> actions;
 }
