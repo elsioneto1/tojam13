@@ -61,6 +61,9 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     private float crowdCheckCooldown = 0.1f;
     private bool canCheckFOrEntities = true;
+
+    public GameObject comboPrefab;
+
     void Start() {
 		animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -191,7 +194,18 @@ public class Player : MonoBehaviour {
         {
             LoadComboCountdown(FunkManager.S_INSTANCE.comboTimeFrame);
             previousSpecialMovement = currentSpecialMovement;
-            FunkManager.CompleteAction(currentActionSequence);
+            if(FunkManager.CompleteAction(currentActionSequence))
+            {
+                int numberOfStars = 8;
+                for(int i = 0; i < numberOfStars; i++)
+                {
+                    GameObject star = Instantiate(comboPrefab, transform.position, Quaternion.identity);
+                    star.transform.localEulerAngles = new Vector3(0, -45, 0);
+                    float random = UnityEngine.Random.Range(-1f, 1f);
+                    star.GetComponent<Rigidbody>().AddForce(1 * Mathf.Sign(random), 3 + UnityEngine.Random.Range(-1f,3f), 0, ForceMode.Impulse);
+                    iTween.ScaleTo(star, new Vector3(0.75f - UnityEngine.Random.Range(0,0.2f), 0.75f - UnityEngine.Random.Range(0, 0.2f), 1), 0.5f);
+                }
+            }
             bouncingPending = false;
             currentSpecialMovement = null;
             finishMovCB.Invoke();
@@ -305,8 +319,6 @@ public class Player : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Joystick3Button2))
                 queuedMov = inputXAction;
         }
-
-
 
         if (queuedMov != null)
             if (currentSpecialMovement == null)

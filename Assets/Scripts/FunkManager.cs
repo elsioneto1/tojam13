@@ -21,8 +21,8 @@ public class FunkManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Canvas canvas;
-    public List<RectTransform> comboHolderPositionList;
-
+    public List<GameObject> comboHolders;
+    private List<GameObject> actualComboHolders;
     private List<GameObject> waveTiles = new List<GameObject>();
     //	private List<GameObject> player3Tiles = new List<GameObject>();
 
@@ -44,23 +44,26 @@ public class FunkManager : MonoBehaviour
     public UnityEvent PositivePointsCB;
     public UnityEvent NegativePointsCB;
 
+    private int Translocation = 200;
+    private int minComboIndex = 0;
+
     private void Awake()
     {
         singleton = this;
+        actualComboHolders = comboHolders;
     }
     private void Start()
     {
         
         StartCoroutine(BuildNextWaveSet());
         S_INSTANCE = this;
-
+       
     }
 
     private IEnumerator BuildNextWaveSet()
     {
         while (true)
         {
-            int time = waveList[currentSet].totalWaveTime;
 
             waveCombos.Add(waveList[currentSet].FirstSet);
             waveCombos.Add(waveList[currentSet].SecondSet);
@@ -72,9 +75,8 @@ public class FunkManager : MonoBehaviour
             BuildPlayerTiles(waveCombos);
 
             yield return new WaitForSeconds(1);
-            ScrollTilesDown(0, 1, 1);
-            ScrollTilesDown(1, 1, 1);
-            ScrollTilesDown(2, 1, 1);
+            
+            ScrollTilesDown(1);
             //yield return new WaitForSeconds(timeBetweenCombos);
             //ScrollTilesDown(3, 1, 1);
             //	ScrollTilesDown(player3Tiles, 1, 1);
@@ -92,7 +94,10 @@ public class FunkManager : MonoBehaviour
             //Limpa tudo que tiver que limpar, comeca de novo, proxima wave ou end
             ResetUI();
             if(currentSet + 1 < waveList.Count)
+            {
                 currentSet++;
+                actualComboHolders = comboHolders;
+            }
         }
     }
 
@@ -100,20 +105,29 @@ public class FunkManager : MonoBehaviour
     {
         waveCompleted = false;
 
-        for (int i = 0; i < comboHolderPositionList.Count; ++i)
+        for (int i = 0; i < actualComboHolders.Count; ++i)
         {
             for (int k = 0; k < randomizedList[i].actions.Count; ++k)
             {
                 GameObject tile = Instantiate(tilePrefab, Vector3.zero, Quaternion.identity);
                 Tile t = tile.GetComponent<Tile>();
                 t.SetTileAction(randomizedList[i].actions[k]);
-                //t.SetTileColor((Enums.Players)i);
                 tile.transform.SetParent(canvas.transform);
-                tile.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-                tile.GetComponent<RectTransform>().anchoredPosition3D = comboHolderPositionList[i].anchoredPosition3D + new Vector3(45 * k, 50, 0);
-
+                tile.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                tile.GetComponent<RectTransform>().anchoredPosition3D = actualComboHolders[i].GetComponent<RectTransform>().anchoredPosition3D + new Vector3(40 * k, 55, 0);
+                int sign;
+                if (k % 2 == 0)
+                    sign = 1;
+                else
+                    sign = -1;
+                tile.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 5 * sign);
                 waveTiles.Add(tile);
             }
+        }
+
+        for (int p = 0; p < waveTiles.Count; p++)
+        {
+            waveTiles[p].transform.SetSiblingIndex(((waveTiles.Count - 1)- p) + 3);
         }
     }
 
@@ -137,25 +151,54 @@ public class FunkManager : MonoBehaviour
         //player3Tiles.Clear();
     }
 
-    private void ScrollTilesDown(int index, int units, float time)
+    private void ScrollTilesDown( float time)
     {
         if (waveTiles.Count == 0)
             return;
-        for (int i = index * waveCombos[index].actions.Count; i < waveCombos[index].actions.Count * (index + 1) ; i++)
-        {
+        //for (int i = index * waveCombos[index].actions.Count; i < waveCombos[index].actions.Count * (index + 1) ; i++)
+        //{
+        //    Debug.Log(i);
+        //    iTween.MoveTo(waveTiles[i], waveTiles[i].transform.position + new Vector3(0, -Translocation, 0), time);
+        //}
 
-            iTween.MoveTo(waveTiles[i], waveTiles[i].transform.position + new Vector3(0, -140 * units, 0), time);
+        for(int i = 0; i < waveTiles.Count; i++)
+        {
+            iTween.MoveTo(waveTiles[i], waveTiles[i].transform.position + new Vector3(0, -Translocation, 0), time);
+        }
+
+        for(int p = 0; p < actualComboHolders.Count; p++)
+        {
+            iTween.MoveTo(actualComboHolders[p].transform.GetChild(0).gameObject, actualComboHolders[p].transform.GetChild(0).transform.position + new Vector3(0, - Translocation, 0), 1);
         }
     }
 
     private void DestroyTiles(int index)
     {
-        for (int i = ((index + 1) * waveCombos[index].actions.Count) - 1; i >= index * waveCombos[index].actions.Count; i--)
+        int endIndex = 0;
+        int startIndex = 0;
+
+        if (index == 0)
+            endIndex = waveCombos[index].actions.Count;
+        else
+        {
+            for(int p = 0; p <= index; p++)
+            {
+                endIndex += waveCombos[p].actions.Count;
+            }
+
+            for(int k = 0; k < index; k++)
+            {
+                startIndex += waveCombos[k].actions.Count;
+            }
+        }
+        
+        for (int i = endIndex - 1; i >= startIndex; i--)
         {
             Destroy(waveTiles[i]);
             waveTiles.Remove(waveTiles[i]);
         }
-
+        iTween.MoveTo(actualComboHolders[index].transform.GetChild(0).gameObject, actualComboHolders[index].transform.GetChild(0).transform.position + new Vector3(0, Translocation, 0), 1);
+        actualComboHolders.Remove(actualComboHolders[index]);
     }
 
     public static bool CompleteAction(List<Enums.ActionTypes> comboList)
@@ -163,15 +206,15 @@ public class FunkManager : MonoBehaviour
         if (singleton.waveCombos.Count == 0 || comboList.Count == 0)
 			return false;
 
-        //bool shouldReturn = true;
-        //for(int p = 0; p < singleton.waveCombos.Count; p++)
-        //{
-        //    if (comboList.Count == singleton.waveCombos[p].actions.Count)
-        //        shouldReturn = false;
-        //}
+        bool shouldReturn = true;
+        for (int p = 0; p < singleton.waveCombos.Count; p++)
+        {
+            if (comboList.Count == singleton.waveCombos[p].actions.Count)
+                shouldReturn = false;
+        }
 
-        //if (shouldReturn)
-        //    return false;
+        if (shouldReturn)
+            return false;
 
         if (comboList.Count < 3)
             return false;
