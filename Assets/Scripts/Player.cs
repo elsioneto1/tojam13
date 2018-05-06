@@ -151,12 +151,16 @@ public class Player : MonoBehaviour {
 			else if(animator.GetBool("CompletedJump") && animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
 			{
 				animator.SetBool("CompletedJump", false);
-			}
+               
+            }
+
             if (stunned)
             {
                 stunned = false;
-
             }
+
+            if (animator.GetBool("IsSliding") && animator.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
+                animator.SetBool("IsSliding", false);
         }
     }
 
@@ -172,12 +176,12 @@ public class Player : MonoBehaviour {
             currentSpecialMovement = null;
             finishMovCB.Invoke();
 
-			if (animator.GetBool("IsJumping"))
+			if (animator.GetBool("IsJumping") && animator.GetBool("CompletedJump"))
 				animator.SetBool("IsJumping", false);
 
-			if (animator.GetBool("IsSliding"))
-				animator.SetBool("IsSliding", false);
-		}
+            if (animator.GetBool("IsSpinning") && animator.GetCurrentAnimatorStateInfo(0).IsName("Spin"))
+                animator.SetBool("IsSpinning", false);
+        }
     }
 
     void ResetVariables()
@@ -400,11 +404,21 @@ public class Player : MonoBehaviour {
             if (movement.jumpVelocity > 0)
 			{
 				animator.SetBool("IsJumping", true);
-			}
+                animator.SetBool("IsSpinning", false);
+                animator.SetBool("IsSliding", false);
+            }
 			else if(movement.applyHurricane == false)
 			{
 				animator.SetBool("IsSliding", true);
-			}
+                animator.SetBool("IsJumping", false);
+                animator.SetBool("IsSpinning", false);
+            }
+            else if(movement.applyHurricane == true)
+            {
+                animator.SetBool("IsSliding", false);
+                animator.SetBool("IsJumping", false);
+                animator.SetBool("IsSpinning", true);
+            }
         }
     }
 
