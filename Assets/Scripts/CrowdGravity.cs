@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CrowdGravity : MonoBehaviour {
     public static float vectorPower = 1f;
-
+    public static CrowdGravity S_INSTANCE;
     public static CrowdEntity[] entities;
    // public SphereCollider sphereCollider;
     // Use this for initialization
@@ -13,6 +13,8 @@ public class CrowdGravity : MonoBehaviour {
 
         if (entities == null)
             entities = FindObjectsOfType<CrowdEntity>();
+
+        S_INSTANCE = this;
        // sphereCollider = GetComponent<SphereCollider>();
     }
 
