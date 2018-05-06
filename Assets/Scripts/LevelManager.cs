@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour {
     [System.Serializable]
     public class LevelConfig
     {
+
+        public string name;
         public Transform crowdPoint;
         public CrowdManager.ColliderType colliderType;
         public float colliderSize;
@@ -23,6 +25,11 @@ public class LevelManager : MonoBehaviour {
     [System.Serializable]
     public class LevelSequence
     {
+        [Header("Gravity Location")]
+        public Transform gravityLocation;
+
+        [Header("Wave Config")]
+        public string name;
         public float startAfterSeconds = 1;
         public float duration = 1;
         public LevelConfig[] sequenceDynamic;
@@ -48,7 +55,7 @@ public class LevelManager : MonoBehaviour {
         {
             StartCoroutine(SetManager(levelSequence[currentIndex].sequenceDynamic[i]));
         }
-
+        CrowdGravity.S_INSTANCE.transform.position = levelSequence[currentIndex].gravityLocation.position;
         yield return new WaitForSeconds(levelSequence[currentIndex].duration);
 
         Debug.Log("exiting " + currentIndex);
