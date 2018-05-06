@@ -14,13 +14,13 @@ public class Bouncer : MonoBehaviour {
 	void Update () {
 		
 	}
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag  == "Player")
         {
         
             Debug.Log("??");
-            Player p = other.GetComponent<Player>();
+            Player p = other.gameObject. GetComponent<Player>();
             if (!gambs.ContainsKey(p))
                 gambs.Add(p,Vector3.zero);
 
@@ -29,7 +29,7 @@ public class Bouncer : MonoBehaviour {
             vel = -vel;
             vel.y = -vel.y;
 
-            p.bouncingPending = true;
+            p.bouncingPending = !p.bouncingPending;
 
             //gambs[p] = vel;
             //p.SetVelocity(vel);

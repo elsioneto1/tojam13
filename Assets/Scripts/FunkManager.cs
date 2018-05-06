@@ -143,7 +143,7 @@ public class FunkManager : MonoBehaviour
             return;
         for (int i = index * waveCombos[index].actions.Count; i < waveCombos[index].actions.Count * (index + 1) ; i++)
         {
-            Debug.Log(i);
+
             iTween.MoveTo(waveTiles[i], waveTiles[i].transform.position + new Vector3(0, -140 * units, 0), time);
         }
     }

@@ -53,8 +53,11 @@ public class Player : MonoBehaviour {
 
     public List<Enums.ActionTypes> currentActionSequence = new List<Enums.ActionTypes>();
 
+    public GameObject shadow;
+
     public UnityEvent finishMovCB;
     public UnityEvent comboCB;
+    public UnityEvent sefodeuCB;
     // Use this for initialization
     private float crowdCheckCooldown = 0.1f;
     private bool canCheckFOrEntities = true;
@@ -136,6 +139,20 @@ public class Player : MonoBehaviour {
     void UpdateStates()
     {
         movementCurrentElapsedTime = Time.deltaTime* currentSpecialMovement.timeScaler;
+    }
+
+    void PlaceShadow()
+    {
+
+        RaycastHit hit;
+        grounded = false;
+        Physics.Raycast(transform.position - new Vector3(0, colliderComponent.bounds.extents.y * 0.8f, 0), Vector3.down, out hit, 0.1f);
+
+    }
+
+    public void CreateWrongParticle(GameObject wrongParticle)
+    {
+        Instantiate(wrongParticle,transform.position,Quaternion.identity);
     }
 
     void CheckGrounded()
@@ -458,9 +475,15 @@ public class Player : MonoBehaviour {
         CrowdEntity ce = other.gameObject.GetComponent<CrowdEntity>();
         if (ce != null && canCheckFOrEntities)
         {
-            bouncingPending = !bouncingPending;
-            canCheckFOrEntities = false;
-            StartCoroutine(ResetEntityCheck());
+            if (currentSpecialMovement != null)
+            {
+                bouncingPending = !bouncingPending;
+                canCheckFOrEntities = false;
+                StartCoroutine(ResetEntityCheck());
+                FunkManager.S_INSTANCE.ModifyPoints(-1);
+                sefodeuCB.Invoke();
+
+            }
         }
 
     }
